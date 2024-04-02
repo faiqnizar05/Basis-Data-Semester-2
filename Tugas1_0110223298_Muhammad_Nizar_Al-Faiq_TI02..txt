@@ -1,0 +1,754 @@
+Nama : Muhammad Nizar Al-Faiq
+Nim : 0110223298
+Prodi : Teknik Informatika 02
+Angkatan : 2023
+
+============================================================================================================================================================ 
+
+Jawaban No1. Buatlah database baru dengan nama: dbpegawai 
+
+MariaDB [(none)]> CREATE DATABASE dbpegawai;
+Query OK, 1 row affected (0.07 sec)
+
+Jawaban No2. Masuk ke dbpegawai dengan perintah USE?
+- MariaDB [(none)]> USE dbpegawai;
+Database changed
+
+Jawaban No3. id int primary key auto_increment
+nama varchar(30) dengan contraint: wajib diisi dan tidak boleh sama:
+
+- Database changed
+MariaDB [dbpegawai]> CREATE TABLE divisi(
+    -> ID INT PRIMARY KEY AUTO_INCREMENT,
+    -> nama VARCHAR(30) NOT NULL UNIQUE);
+Query OK, 0 rows affected (0.18 sec)
+
+Jawaban No4. Tampilkan deskripsi tabel divisi:
+-  DESC divisi;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| ID    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama  | varchar(30) | NO   | UNI | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.06 sec)
+
+Jawaban No5. id int primary key auto_increment
+nama varchar(30) dengan contraint: wajib diisi dan tidak boleh sama
+
+- MariaDB [dbpegawai]> CREATE TABLE jabatan(
+    -> ID INT PRIMARY KEY AUTO_INCREMENT,
+    -> nama VARCHAR(30) NOT NULL UNIQUE);
+Query OK, 0 rows affected (0.06 sec)
+
+MariaDB [dbpegawai]> DESC jabatan;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| ID    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama  | varchar(30) | NO   | UNI | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.02 sec)
+
+Jawaban No6. Tampilkan deskripsi tabel jabatan:
+
+- MariaDB [dbpegawai]> DESC jabatan;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| ID    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama  | varchar(30) | NO   | UNI | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.02 sec)
+
+Jawaban No.7  d int primary key auto_increment
+nip char dengan constraint: wajib diisi, tidak boleh sama & 5 karakter
+nama varchar dengan constraint: wajib diisi dan maksimal 30 karakter
+gender enum('Laki-Laki','Perempuan') dengan constraint: wajib diisi
+tmp_lahir varchar dengan constraint: wajib diisi dan maksimal 30 karakter
+tgl_lahir date dengan constraint: wajib diisi
+iddivisi int sebagai foreign key, tidak boleh kosong, merujuk ke tabel divisi ke field id
+idjabatan int sebagai foreign key, tidak boleh kosong, merujuk ke tabel jabatan ke field id
+alamat text:
+
+- MariaDB [dbpegawai]> CREATE TABLE pegawai(
+    -> id INT PRIMARY KEY AUTO_INCREMENT,
+    -> nip CHAR(5) NOT NULL UNIQUE,
+    -> nama VARCHAR(30) NOT NULL,
+    -> gender ENUM('LAKI-LAKI','PEREMPUAN') NOT NULL,
+    -> tmp_lahir VARCHAR(30) NOT NULL,
+    -> tgl_lahir DATE NOT NULL,
+    -> iddivisi INT NOT NULL,
+    -> idjabatan INT NOT NULL,
+    -> alamat TEXT,
+    -> FOREIGN KEY (iddivisi) REFERENCES divisi(ID),
+    -> FOREIGN KEY (idjabatan) REFERENCES jabatan(ID));
+Query OK, 0 rows affected (0.14 sec)
+
+Jawaban No8. Tampilkan deskripsi tabel pegawai:
+
+- MariaDB [dbpegawai]> DESC pegawai;
++-----------+-------------------------------+------+-----+---------+----------------+
+| Field     | Type                          | Null | Key | Default | Extra          |
++-----------+-------------------------------+------+-----+---------+----------------+
+| id        | int(11)                       | NO   | PRI | NULL    | auto_increment |
+| nip       | char(5)                       | NO   | UNI | NULL    |                |
+| nama      | varchar(30)                   | NO   |     | NULL    |                |
+| gender    | enum('LAKI-LAKI','PEREMPUAN') | NO   |     | NULL    |                |
+| tmp_lahir | varchar(30)                   | NO   |     | NULL    |                |
+| tgl_lahir | date                          | NO   |     | NULL    |                |
+| iddivisi  | int(11)                       | NO   | MUL | NULL    |                |
+| idjabatan | int(11)                       | NO   | MUL | NULL    |                |
+| alamat    | text                          | YES  |     | NULL    |                |
++-----------+-------------------------------+------+-----+---------+----------------+
+9 rows in set (0.11 sec)
+
+Jawaban No9. Tampilkan tabel-tabel yang ada di dbpegawai
+
+- MariaDB [dbpegawai]> SHOW TABLES;
++---------------------+
+| Tables_in_dbpegawai |
++---------------------+
+| divisi              |
+| jabatan             |
+| pegawai             |
++---------------------+
+3 rows in set (0.02 sec)
+
+Jawaban No.10 Input data divisi => SDM, Keuangan, Marketing, IT :
+
+- MariaDB [dbpegawai]> INSERT INTO divisi (nama) VALUES
+    -> ('SDM'),
+    -> ('Keuangan'),
+    -> ('Marketing'),
+    -> ('IT');
+Query OK, 4 rows affected (0.03 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+Jawaban No11. Tampilkan seluruh data divisi :
+
+- MariaDB [dbpegawai]> SELECT * FROM divisi ORDER BY ID;
++----+-----------+
+| ID | nama      |
++----+-----------+
+|  1 | SDM       |
+|  2 | Keuangan  |
+|  3 | Marketing |
+|  4 | IT        |
++----+-----------+
+4 rows in set (0.01 sec)
+
+Jawaban No12. Input data jabatan => Direktur, Manajer, Asisten Manajer, Staff:
+
+- MariaDB [dbpegawai]> INSERT INTO jabatan (ID,nama) VALUES
+    -> ('','DIREKTUR'),
+    -> ('','MANAGER'),
+    -> ('','ASISTEN MANAGER'),
+    -> ('','STAFF');
+Query OK, 4 rows affected, 4 warnings (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 4
+
+Jawaban 13. Tampilkan seluruh data jabatan:
+- MariaDB [dbpegawai]> SELECT * FROM jabatan ORDER BY ID;
++----+-----------------+
+| ID | nama            |
++----+-----------------+
+|  1 | DIREKTUR        |
+|  2 | MANAGER         |
+|  3 | ASISTEN MANAGER |
+|  4 | STAFF           |
++----+-----------------+
+4 rows in set (0.00 sec)
+
+Jawaban No14. Input 20 orang pegawai ( 1 divisi 5 orang, untuk gender dan jabatan diacak) 
+
+- INSERT INTO pegawai (nip, nama, gender, tmp_lahir, tgl_lahir, iddivisi, idjabatan, alamat)
+    -> SELECT
+    ->     LPAD(FLOOR(RAND() * 99999) + 1,     5, '0') AS nip,
+    ->     CONCAT('Pegawai ', num) AS nama,
+    ->     CASE WHEN RAND() > 0.5 THEN 'Laki-laki' ELSE 'Perempuan' END AS gender,
+    ->     CONCAT('Tempat Lahir ', num) AS tmp_lahir,
+    ->     DATE_SUB(CURRENT_DATE(), INTERVAL FLOOR(RAND() * 365) DAY) AS tgl_lahir,
+    ->     1 AS iddivisi,
+    ->     (SELECT id FROM jabatan ORDER BY RAND() LIMIT 1) AS idjabatan,
+    ->     CONCAT('Alamat Pegawai ', num) AS alamat
+    -> FROM
+    ->     (SELECT 1 AS num UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+    ->      UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+    ->      UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15
+    ->      UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20) AS numbers;
+Query OK, 20 rows affected (0.08 sec)
+
+Jawaban No15. Tampilkan seluruh data pegawai:
+
+- MariaDB [dbpegawai]> SELECT * FROM pegawai;
++----+-------+------------+-----------+-----------------+------------+----------+-----------+-------------------+
+| id | nip   | nama       | gender    | tmp_lahir       | tgl_lahir  | iddivisi | idjabatan | alamat            |
++----+-------+------------+-----------+-----------------+------------+----------+-----------+-------------------+
+|  1 | 95150 |  Muhammad Nizar Al-Faiq | PEREMPUAN | Tempat Lahir 1  | 2023-09-18 |        1 |         1 | Alamat Pegawai 1  |
+|  2 | 88680 |  muhamad zaky | PEREMPUAN | Tempat Lahir 2  | 2024-03-27 |        1 |         2 | Alamat Pegawai 2  |
+|  3 | 30473 | muhammad fauzi  | PEREMPUAN | Tempat Lahir 3  | 2023-05-23 |        1 |         3 | Alamat Pegawai 3  |
+|  4 | 97378 |  muhammad pian  | LAKI-LAKI | Tempat Lahir 4  | 2023-04-02 |        1 |         1 | Alamat Pegawai 4  |
+|  5 | 16009 |  muhammad adit  | LAKI-LAKI | Tempat Lahir 5  | 2023-12-06 |        1 |         6 | Alamat Pegawai 5  |
+|  6 | 86865 |  muhammat aci   | LAKI-LAKI | Tempat Lahir 6  | 2023-12-08 |        1 |         2 | Alamat Pegawai 6  |
+|  7 | 62327 | muhammat aci   | LAKI-LAKI | Tempat Lahir 7  | 2023-05-01 |        1 |         6 | Alamat Pegawai 7  |
+|  8 | 17350 |  Stuars | LAKI-LAKI | Tempat Lahir 8  | 2024-02-22 |        1 |         8 | Alamat Pegawai 8  |
+|  9 | 63710 |  muhammad hafis  | LAKI-LAKI | Tempat Lahir 9  | 2023-12-04 |        1 |         6 | Alamat Pegawai 9  |
+| 10 | 39454 |  muhammad fadil | PEREMPUAN | Tempat Lahir 10 | 2024-03-06 |        1 |         6 | Alamat Pegawai 10 |
+| 11 | 69429 | muhammad fahri  | LAKI-LAKI | Tempat Lahir 11 | 2023-07-11 |        1 |         3 | Alamat Pegawai 11 |
+| 12 | 15594 |   Santosoo | LAKI-LAKI | Tempat Lahir 12 | 2024-03-01 |        1 |         2 | Alamat Pegawai 12 |
+| 13 | 30492 | Santoso | PEREMPUAN | Tempat Lahir 13 | 2023-06-11 |        1 |         5 | Alamat Pegawai 13 |
+| 14 | 92211 |  muhamad joko | PEREMPUAN | Tempat Lahir 14 | 2023-05-06 |        1 |         6 | Alamat Pegawai 14 |
+| 15 | 25885 |   muhammad ghfari | LAKI-LAKI | Tempat Lahir 15 | 2023-12-24 |        1 |         8 | Alamat Pegawai 15 |
+| 16 | 15040 |muhamad yusup | PEREMPUAN | Tempat Lahir 16 | 2023-12-26 |        1 |         8 | Alamat Pegawai 16 |
+| 17 | 43335 |   muhammad reza | PEREMPUAN | Tempat Lahir 17 | 2023-11-17 |        1 |         2 | Alamat Pegawai 17 |
+| 18 | 48377 |   muhammad jorday | PEREMPUAN | Tempat Lahir 18 | 2023-12-30 |        1 |         5 | Alamat Pegawai 18 |
+| 19 | 21019 |  Asep  | LAKI-LAKI | Tempat Lahir 19 | 2024-01-24 |        1 |         7 | Alamat Pegawai 19 |
+| 20 | 89738 |  Ronsky | LAKI-LAKI | Tempat Lahir 20 | 2023-09-14 |        1 |         4 | Alamat Pegawai 20 |
++----+-------+------------+-----------+-----------------+------------+----------+-----------+-------------------+
+20 rows in set (0.00 sec)
+
+Jawaban No16. ubah data 5 orang pegawai (dengan ketentuan ubah 3 kolom(bebas)) 
+
+- Ubah data 1
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET tmp_lahir = 'Kota Baru', tgl_lahir = '1990-05-15', alamat = 'Jalan Baru No. 10'
+    -> WHERE id = 1;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+- Ubah data 2 
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET tmp_lahir = 'Kota Baru', tgl_lahir = '1992-07-25', alamat = 'Jalan Lama No. 5'
+    -> WHERE id = 2;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+- Ubah data 3 
+MariaDB [dbpegawai]> -- Ubah data pegawai 3
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET tmp_lahir = 'Kota Tua', tgl_lahir = '1988-12-10', alamat = 'Jalan Maju No. 15'
+    -> WHERE id = 3;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+- Ubah data 4 
+
+MariaDB [dbpegawai]> -- Ubah data pegawai 4
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET tmp_lahir = 'Kota Tua', tgl_lahir = '1985-03-20', alamat = 'Jalan Jaya No. 8'
+    -> WHERE id = 4;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+- Ubah data 5 
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET tmp_lahir = 'Kota Baru', tgl_lahir = '1995-09-05', alamat = 'Jalan Indah No. 12'
+    -> WHERE id = 5;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+Jawaban No17. Hapus data pegawai terakhir:
+
+- MariaDB [dbpegawai]> DELETE FROM pegawai
+    -> ORDER BY id DESC
+    -> LIMIT 1;
+Query OK, 1 row affected (0.01 sec)
+
+Jawaban No18. Gunakan alter tabel pada tabel pegawai untuk menambahkan kolom baru berat_badan dengan 
+tipe data float wajib diisi, lalu input berat badan semua pegawai secara acak
+
+- MariaDB [dbpegawai]> ALTER TABLE pegawai
+    -> ADD COLUMN berat_badan FLOAT NOT NULL;
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+- MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET berat_badan = RAND() * 100 + 40; -- Menghasilkan nilai berat badan antara 40 hingga 140 kilogram
+Query OK, 19 rows affected (0.01 sec)
+Rows matched: 19  Changed: 19  Warnings: 0
+
+Jawaban No19. Gunakan alter tabel pada tabel pegawai untuk menambahkan kolom baru umur dengan tipe data 
+integer wajib diisi, lalu input umur semua pegawai secara acak
+
+- MariaDB [dbpegawai]> ALTER TABLE pegawai
+    -> CHANGE COLUMN gender jenis_kelamin ENUM('LAKI-LAKI', 'PEREMPUAN') NOT NULL;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+Jawaban No20. unakan alter tabel pada tabel pegawai untuk mengubah nama kolom gender menjadi 
+jenis_kelamin
+
+
+
+-Menambah column baru pegawai :
+MariaDB [dbpegawai]> ALTER TABLE pegawai
+    -> ADD COLUMN umur INT NOT NULL;
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+- Menggunakan perintah UPDATE untuk mengisi nilai umur secara acak untuk setiap pegawai:
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET umur = FLOOR(RAND() * 40) + 20; -- Menghasilkan nilai umur antara 20 hingga 59 tahun
+Query OK, 19 rows affected (0.01 sec)
+Rows matched: 19  Changed: 19  Warnings: 0
+
+Jawaban No21. Tampilkan kolom2 tertentu di tabel pegawai (nip,nama,jenis_kelamin,alamat)
+
+- MariaDB [dbpegawai]> SELECT nip, nama, jenis_kelamin, alamat
+    -> FROM pegawai;
++-------+------------+---------------+--------------------+
+| nip   | nama       | jenis_kelamin | alamat             |
++-------+------------+---------------+--------------------+
+| 95150 | Pegawai 1  | PEREMPUAN     | Jalan Baru No. 10  |
+| 88680 | Pegawai 2  | PEREMPUAN     | Jalan Lama No. 5   |
+| 30473 | Pegawai 3  | PEREMPUAN     | Jalan Maju No. 15  |
+| 97378 | Pegawai 4  | LAKI-LAKI     | Jalan Jaya No. 8   |
+| 16009 | Pegawai 5  | LAKI-LAKI     | Jalan Indah No. 12 |
+| 86865 | Pegawai 6  | LAKI-LAKI     | Alamat Pegawai 6   |
+| 62327 | Pegawai 7  | LAKI-LAKI     | Alamat Pegawai 7   |
+| 17350 | Pegawai 8  | LAKI-LAKI     | Alamat Pegawai 8   |
+| 63710 | Pegawai 9  | LAKI-LAKI     | Alamat Pegawai 9   |
+| 39454 | Pegawai 10 | PEREMPUAN     | Alamat Pegawai 10  |
+| 69429 | Pegawai 11 | LAKI-LAKI     | Alamat Pegawai 11  |
+| 15594 | Pegawai 12 | LAKI-LAKI     | Alamat Pegawai 12  |
+| 30492 | Pegawai 13 | PEREMPUAN     | Alamat Pegawai 13  |
+| 92211 | Pegawai 14 | PEREMPUAN     | Alamat Pegawai 14  |
+| 25885 | Pegawai 15 | LAKI-LAKI     | Alamat Pegawai 15  |
+| 15040 | Pegawai 16 | PEREMPUAN     | Alamat Pegawai 16  |
+| 43335 | Pegawai 17 | PEREMPUAN     | Alamat Pegawai 17  |
+| 48377 | Pegawai 18 | PEREMPUAN     | Alamat Pegawai 18  |
+| 21019 | Pegawai 19 | LAKI-LAKI     | Alamat Pegawai 19  |
++-------+------------+---------------+--------------------+
+19 rows in set (0.00 sec)
+
+Jawaban No22. Tampilkan baris2 tertentu di tabel pegawai (yang gendernya laki2 saja):
+
+- MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    -> WHERE jenis_kelamin = 'LAKI-LAKI';
++----+-------+------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+| id | nip   | nama       | jenis_kelamin | tmp_lahir       | tgl_lahir  | iddivisi | idjabatan | alamat             | berat_badan | umur |
++----+-------+------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+|  4 | 97378 | Pegawai 4  | LAKI-LAKI     | Kota Tua        | 1985-03-20 |        1 |         1 | Jalan Jaya No. 8   |     138.626 |   23 |
+|  5 | 16009 | Pegawai 5  | LAKI-LAKI     | Kota Baru       | 1995-09-05 |        1 |         6 | Jalan Indah No. 12 |         114 |   29 |
+|  6 | 86865 | Pegawai 6  | LAKI-LAKI     | Tempat Lahir 6  | 2023-12-08 |        1 |         2 | Alamat Pegawai 6   |     114.121 |   59 |
+|  7 | 62327 | Pegawai 7  | LAKI-LAKI     | Tempat Lahir 7  | 2023-05-01 |        1 |         6 | Alamat Pegawai 7   |     88.6044 |   26 |
+|  8 | 17350 | Pegawai 8  | LAKI-LAKI     | Tempat Lahir 8  | 2024-02-22 |        1 |         8 | Alamat Pegawai 8   |     60.6596 |   54 |
+|  9 | 63710 | Pegawai 9  | LAKI-LAKI     | Tempat Lahir 9  | 2023-12-04 |        1 |         6 | Alamat Pegawai 9   |     97.4846 |   52 |
+| 11 | 69429 | Pegawai 11 | LAKI-LAKI     | Tempat Lahir 11 | 2023-07-11 |        1 |         3 | Alamat Pegawai 11  |      94.767 |   56 |
+| 12 | 15594 | Pegawai 12 | LAKI-LAKI     | Tempat Lahir 12 | 2024-03-01 |        1 |         2 | Alamat Pegawai 12  |     137.502 |   25 |
+| 15 | 25885 | Pegawai 15 | LAKI-LAKI     | Tempat Lahir 15 | 2023-12-24 |        1 |         8 | Alamat Pegawai 15  |     88.1092 |   50 |
+| 19 | 21019 | Pegawai 19 | LAKI-LAKI     | Tempat Lahir 19 | 2024-01-24 |        1 |         7 | Alamat Pegawai 19  |      105.32 |   55 |
++----+-------+------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+10 rows in set (0.02 sec)
+
+Jawaban N023. Tampilkan baris2 tertentu di tabel pegawai (yang bekerja di divisi IT dan gendernya perempuan)
+
+- MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    -> WHERE iddivisi = (SELECT ID FROM divisi WHERE nama = 'IT')
+    -> AND jenis_kelamin = 'PEREMPUAN';
+Empty set (0.01 sec)
+
+Jawaban No24. Tampilkan data pegawai yang umurnya di atas 30 tahun dan lahirnya di kota jakarta dengan 
+klausa WHERE, AND :
+
+- MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    -> WHERE umur > 30
+    -> AND tmp_lahir = 'Jakarta';
+Empty set (0.01 sec)
+
+Jawaban No25. Tampilkan data pegawai yang bekerja pada divisi marketing, berumur lebih dari 30 tahun dan 
+berjenis kelamin perempuan dengan klausa WHERE, AND
+
+- MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    -> WHERE iddivisi = (SELECT ID FROM divisi WHERE nama = 'Marketing')
+    -> AND umur > 30
+    -> AND jenis_kelamin = 'PEREMPUAN';
+Empty set (0.00 sec)
+
+Jawaban No26. Tampilkan data pegawai dengan klausa key (nip)
+
+- penggunaan klausa WHERE dengan kunci NIP
+MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    -> WHERE nip = 'Nomor_Induk_Pegawai_Yang_Ingin_Dicari';
+Empty set (0.00 sec)
+
+- lebih dari satu nilai NIP yang ingin Anda cari, Anda dapat menggunakan klausa IN dalam perintah WHERE:
+
+MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    -> WHERE nip IN ('Nomor_Induk_Pegawai_1', 'Nomor_Induk_Pegawai_2', 'Nomor_Induk_Pegawai_3');
+Empty set (0.01 sec)
+
+Jawaban No27. Tampilkan data pegawai dengan klausa non key (gender) 
+
+MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    -> WHERE jenis_kelamin = 'PEREMPUAN';
++----+-------+------------+---------------+-----------------+------------+----------+-----------+-------------------+-------------+------+
+| id | nip   | nama       | jenis_kelamin | tmp_lahir       | tgl_lahir  | iddivisi | idjabatan | alamat            | berat_badan | umur |
++----+-------+------------+---------------+-----------------+------------+----------+-----------+-------------------+-------------+------+
+|  1 | 95150 | Pegawai 1  | PEREMPUAN     | Kota Baru       | 1990-05-15 |        1 |         1 | Jalan Baru No. 10 |     119.315 |   51 |
+|  2 | 88680 | Pegawai 2  | PEREMPUAN     | Kota Baru       | 1992-07-25 |        1 |         2 | Jalan Lama No. 5  |     62.1977 |   57 |
+|  3 | 30473 | Pegawai 3  | PEREMPUAN     | Kota Tua        | 1988-12-10 |        1 |         3 | Jalan Maju No. 15 |     113.044 |   35 |
+| 10 | 39454 | Pegawai 10 | PEREMPUAN     | Tempat Lahir 10 | 2024-03-06 |        1 |         6 | Alamat Pegawai 10 |     65.4441 |   38 |
+| 13 | 30492 | Pegawai 13 | PEREMPUAN     | Tempat Lahir 13 | 2023-06-11 |        1 |         5 | Alamat Pegawai 13 |     63.2111 |   57 |
+| 14 | 92211 | Pegawai 14 | PEREMPUAN     | Tempat Lahir 14 | 2023-05-06 |        1 |         6 | Alamat Pegawai 14 |     63.5485 |   32 |
+| 16 | 15040 | Pegawai 16 | PEREMPUAN     | Tempat Lahir 16 | 2023-12-26 |        1 |         8 | Alamat Pegawai 16 |       109.9 |   54 |
+| 17 | 43335 | Pegawai 17 | PEREMPUAN     | Tempat Lahir 17 | 2023-11-17 |        1 |         2 | Alamat Pegawai 17 |     45.1738 |   21 |
+| 18 | 48377 | Pegawai 18 | PEREMPUAN     | Tempat Lahir 18 | 2023-12-30 |        1 |         5 | Alamat Pegawai 18 |     56.1682 |   44 |
++----+-------+------------+---------------+-----------------+------------+----------+-----------+-------------------+-------------+------+
+9 rows in set (0.00 sec)
+
+
+Jawaban No28. Tampilkan data pegawai dengan klausa in (menyebutkan beberapa nip)
+
+- MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    -> WHERE nip IN ('Nomor_Induk_Pegawai_1', 'Nomor_Induk_Pegawai_2', 'Nomor_Induk_Pegawai_3');
+Empty set (0.00 sec)
+
+Jawaban No29. Tampilkan data pegawai dengan klausa not in (menyebutkan beberapa tempat lahir) 
+
+- MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    -> WHERE tmp_lahir NOT IN ('Tempat_Lahir_1', 'Tempat_Lahir_2', 'Tempat_Lahir_3');
++----+-------+------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+| id | nip   | nama       | jenis_kelamin | tmp_lahir       | tgl_lahir  | iddivisi | idjabatan | alamat             | berat_badan | umur |
++----+-------+------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+|  1 | 95150 | Pegawai 1  | PEREMPUAN     | Kota Baru       | 1990-05-15 |        1 |         1 | Jalan Baru No. 10  |     119.315 |   51 |
+|  2 | 88680 | Pegawai 2  | PEREMPUAN     | Kota Baru       | 1992-07-25 |        1 |         2 | Jalan Lama No. 5   |     62.1977 |   57 |
+|  3 | 30473 | Pegawai 3  | PEREMPUAN     | Kota Tua        | 1988-12-10 |        1 |         3 | Jalan Maju No. 15  |     113.044 |   35 |
+|  4 | 97378 | Pegawai 4  | LAKI-LAKI     | Kota Tua        | 1985-03-20 |        1 |         1 | Jalan Jaya No. 8   |     138.626 |   23 |
+|  5 | 16009 | Pegawai 5  | LAKI-LAKI     | Kota Baru       | 1995-09-05 |        1 |         6 | Jalan Indah No. 12 |         114 |   29 |
+|  6 | 86865 | Pegawai 6  | LAKI-LAKI     | Tempat Lahir 6  | 2023-12-08 |        1 |         2 | Alamat Pegawai 6   |     114.121 |   59 |
+|  7 | 62327 | Pegawai 7  | LAKI-LAKI     | Tempat Lahir 7  | 2023-05-01 |        1 |         6 | Alamat Pegawai 7   |     88.6044 |   26 |
+|  8 | 17350 | Pegawai 8  | LAKI-LAKI     | Tempat Lahir 8  | 2024-02-22 |        1 |         8 | Alamat Pegawai 8   |     60.6596 |   54 |
+|  9 | 63710 | Pegawai 9  | LAKI-LAKI     | Tempat Lahir 9  | 2023-12-04 |        1 |         6 | Alamat Pegawai 9   |     97.4846 |   52 |
+| 10 | 39454 | Pegawai 10 | PEREMPUAN     | Tempat Lahir 10 | 2024-03-06 |        1 |         6 | Alamat Pegawai 10  |     65.4441 |   38 |
+| 11 | 69429 | Pegawai 11 | LAKI-LAKI     | Tempat Lahir 11 | 2023-07-11 |        1 |         3 | Alamat Pegawai 11  |      94.767 |   56 |
+| 12 | 15594 | Pegawai 12 | LAKI-LAKI     | Tempat Lahir 12 | 2024-03-01 |        1 |         2 | Alamat Pegawai 12  |     137.502 |   25 |
+| 13 | 30492 | Pegawai 13 | PEREMPUAN     | Tempat Lahir 13 | 2023-06-11 |        1 |         5 | Alamat Pegawai 13  |     63.2111 |   57 |
+| 14 | 92211 | Pegawai 14 | PEREMPUAN     | Tempat Lahir 14 | 2023-05-06 |        1 |         6 | Alamat Pegawai 14  |     63.5485 |   32 |
+| 15 | 25885 | Pegawai 15 | LAKI-LAKI     | Tempat Lahir 15 | 2023-12-24 |        1 |         8 | Alamat Pegawai 15  |     88.1092 |   50 |
+| 16 | 15040 | Pegawai 16 | PEREMPUAN     | Tempat Lahir 16 | 2023-12-26 |        1 |         8 | Alamat Pegawai 16  |       109.9 |   54 |
+| 17 | 43335 | Pegawai 17 | PEREMPUAN     | Tempat Lahir 17 | 2023-11-17 |        1 |         2 | Alamat Pegawai 17  |     45.1738 |   21 |
+| 18 | 48377 | Pegawai 18 | PEREMPUAN     | Tempat Lahir 18 | 2023-12-30 |        1 |         5 | Alamat Pegawai 18  |     56.1682 |   44 |
+| 19 | 21019 | Pegawai 19 | LAKI-LAKI     | Tempat Lahir 19 | 2024-01-24 |        1 |         7 | Alamat Pegawai 19  |      105.32 |   55 |
++----+-------+------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+19 rows in set (0.00 sec)
+
+Jawaban No30.ampilkan data pegawai berdasarkan nama secara ascending 
+
+- MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    -> ORDER BY berat_badan DESC;
++----+-------+------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+| id | nip   | nama       | jenis_kelamin | tmp_lahir       | tgl_lahir  | iddivisi | idjabatan | alamat             | berat_badan | umur |
++----+-------+------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+|  4 | 97378 | Pegawai 4  | LAKI-LAKI     | Kota Tua        | 1985-03-20 |        1 |         1 | Jalan Jaya No. 8   |     138.626 |   23 |
+| 12 | 15594 | Pegawai 12 | LAKI-LAKI     | Tempat Lahir 12 | 2024-03-01 |        1 |         2 | Alamat Pegawai 12  |     137.502 |   25 |
+|  1 | 95150 | Pegawai 1  | PEREMPUAN     | Kota Baru       | 1990-05-15 |        1 |         1 | Jalan Baru No. 10  |     119.315 |   51 |
+|  6 | 86865 | Pegawai 6  | LAKI-LAKI     | Tempat Lahir 6  | 2023-12-08 |        1 |         2 | Alamat Pegawai 6   |     114.121 |   59 |
+|  5 | 16009 | Pegawai 5  | LAKI-LAKI     | Kota Baru       | 1995-09-05 |        1 |         6 | Jalan Indah No. 12 |         114 |   29 |
+|  3 | 30473 | Pegawai 3  | PEREMPUAN     | Kota Tua        | 1988-12-10 |        1 |         3 | Jalan Maju No. 15  |     113.044 |   35 |
+| 16 | 15040 | Pegawai 16 | PEREMPUAN     | Tempat Lahir 16 | 2023-12-26 |        1 |         8 | Alamat Pegawai 16  |       109.9 |   54 |
+| 19 | 21019 | Pegawai 19 | LAKI-LAKI     | Tempat Lahir 19 | 2024-01-24 |        1 |         7 | Alamat Pegawai 19  |      105.32 |   55 |
+|  9 | 63710 | Pegawai 9  | LAKI-LAKI     | Tempat Lahir 9  | 2023-12-04 |        1 |         6 | Alamat Pegawai 9   |     97.4846 |   52 |
+| 11 | 69429 | Pegawai 11 | LAKI-LAKI     | Tempat Lahir 11 | 2023-07-11 |        1 |         3 | Alamat Pegawai 11  |      94.767 |   56 |
+|  7 | 62327 | Pegawai 7  | LAKI-LAKI     | Tempat Lahir 7  | 2023-05-01 |        1 |         6 | Alamat Pegawai 7   |     88.6044 |   26 |
+| 15 | 25885 | Pegawai 15 | LAKI-LAKI     | Tempat Lahir 15 | 2023-12-24 |        1 |         8 | Alamat Pegawai 15  |     88.1092 |   50 |
+| 10 | 39454 | Pegawai 10 | PEREMPUAN     | Tempat Lahir 10 | 2024-03-06 |        1 |         6 | Alamat Pegawai 10  |     65.4441 |   38 |
+| 14 | 92211 | Pegawai 14 | PEREMPUAN     | Tempat Lahir 14 | 2023-05-06 |        1 |         6 | Alamat Pegawai 14  |     63.5485 |   32 |
+| 13 | 30492 | Pegawai 13 | PEREMPUAN     | Tempat Lahir 13 | 2023-06-11 |        1 |         5 | Alamat Pegawai 13  |     63.2111 |   57 |
+|  2 | 88680 | Pegawai 2  | PEREMPUAN     | Kota Baru       | 1992-07-25 |        1 |         2 | Jalan Lama No. 5   |     62.1977 |   57 |
+|  8 | 17350 | Pegawai 8  | LAKI-LAKI     | Tempat Lahir 8  | 2024-02-22 |        1 |         8 | Alamat Pegawai 8   |     60.6596 |   54 |
+| 18 | 48377 | Pegawai 18 | PEREMPUAN     | Tempat Lahir 18 | 2023-12-30 |        1 |         5 | Alamat Pegawai 18  |     56.1682 |   44 |
+| 17 | 43335 | Pegawai 17 | PEREMPUAN     | Tempat Lahir 17 | 2023-11-17 |        1 |         2 | Alamat Pegawai 17  |     45.1738 |   21 |
++----+-------+------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+19 rows in set (0.00 sec)
+
+Jawaban No31. Tampilkan data pegawai dari yang berat badan paling gemuk ke paling kurus
+
+MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    -> ORDER BY berat_badan DESC;
++----+-------+------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+| id | nip   | nama       | jenis_kelamin | tmp_lahir       | tgl_lahir  | iddivisi | idjabatan | alamat             | berat_badan | umur |
++----+-------+------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+|  4 | 97378 | Pegawai 4  | LAKI-LAKI     | Kota Tua        | 1985-03-20 |        1 |         1 | Jalan Jaya No. 8   |     138.626 |   23 |
+| 12 | 15594 | Pegawai 12 | LAKI-LAKI     | Tempat Lahir 12 | 2024-03-01 |        1 |         2 | Alamat Pegawai 12  |     137.502 |   25 |
+|  1 | 95150 | Pegawai 1  | PEREMPUAN     | Kota Baru       | 1990-05-15 |        1 |         1 | Jalan Baru No. 10  |     119.315 |   51 |
+|  6 | 86865 | Pegawai 6  | LAKI-LAKI     | Tempat Lahir 6  | 2023-12-08 |        1 |         2 | Alamat Pegawai 6   |     114.121 |   59 |
+|  5 | 16009 | Pegawai 5  | LAKI-LAKI     | Kota Baru       | 1995-09-05 |        1 |         6 | Jalan Indah No. 12 |         114 |   29 |
+|  3 | 30473 | Pegawai 3  | PEREMPUAN     | Kota Tua        | 1988-12-10 |        1 |         3 | Jalan Maju No. 15  |     113.044 |   35 |
+| 16 | 15040 | Pegawai 16 | PEREMPUAN     | Tempat Lahir 16 | 2023-12-26 |        1 |         8 | Alamat Pegawai 16  |       109.9 |   54 |
+| 19 | 21019 | Pegawai 19 | LAKI-LAKI     | Tempat Lahir 19 | 2024-01-24 |        1 |         7 | Alamat Pegawai 19  |      105.32 |   55 |
+|  9 | 63710 | Pegawai 9  | LAKI-LAKI     | Tempat Lahir 9  | 2023-12-04 |        1 |         6 | Alamat Pegawai 9   |     97.4846 |   52 |
+| 11 | 69429 | Pegawai 11 | LAKI-LAKI     | Tempat Lahir 11 | 2023-07-11 |        1 |         3 | Alamat Pegawai 11  |      94.767 |   56 |
+|  7 | 62327 | Pegawai 7  | LAKI-LAKI     | Tempat Lahir 7  | 2023-05-01 |        1 |         6 | Alamat Pegawai 7   |     88.6044 |   26 |
+| 15 | 25885 | Pegawai 15 | LAKI-LAKI     | Tempat Lahir 15 | 2023-12-24 |        1 |         8 | Alamat Pegawai 15  |     88.1092 |   50 |
+| 10 | 39454 | Pegawai 10 | PEREMPUAN     | Tempat Lahir 10 | 2024-03-06 |        1 |         6 | Alamat Pegawai 10  |     65.4441 |   38 |
+| 14 | 92211 | Pegawai 14 | PEREMPUAN     | Tempat Lahir 14 | 2023-05-06 |        1 |         6 | Alamat Pegawai 14  |     63.5485 |   32 |
+| 13 | 30492 | Pegawai 13 | PEREMPUAN     | Tempat Lahir 13 | 2023-06-11 |        1 |         5 | Alamat Pegawai 13  |     63.2111 |   57 |
+|  2 | 88680 | Pegawai 2  | PEREMPUAN     | Kota Baru       | 1992-07-25 |        1 |         2 | Jalan Lama No. 5   |     62.1977 |   57 |
+|  8 | 17350 | Pegawai 8  | LAKI-LAKI     | Tempat Lahir 8  | 2024-02-22 |        1 |         8 | Alamat Pegawai 8   |     60.6596 |   54 |
+| 18 | 48377 | Pegawai 18 | PEREMPUAN     | Tempat Lahir 18 | 2023-12-30 |        1 |         5 | Alamat Pegawai 18  |     56.1682 |   44 |
+| 17 | 43335 | Pegawai 17 | PEREMPUAN     | Tempat Lahir 17 | 2023-11-17 |        1 |         2 | Alamat Pegawai 17  |     45.1738 |   21 |
++----+-------+------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+19 rows in set (0.01 sec)
+  
+Jawaban No32. Tampilkan data 5 pegawai teratas gunakan klausa limit
+
+MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    -> ORDER BY berat_badan DESC
+    -> LIMIT 5;
++----+-------+------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+| id | nip   | nama       | jenis_kelamin | tmp_lahir       | tgl_lahir  | iddivisi | idjabatan | alamat             | berat_badan | umur |
++----+-------+------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+|  4 | 97378 | Pegawai 4  | LAKI-LAKI     | Kota Tua        | 1985-03-20 |        1 |         1 | Jalan Jaya No. 8   |     138.626 |   23 |
+| 12 | 15594 | Pegawai 12 | LAKI-LAKI     | Tempat Lahir 12 | 2024-03-01 |        1 |         2 | Alamat Pegawai 12  |     137.502 |   25 |
+|  1 | 95150 | Pegawai 1  | PEREMPUAN     | Kota Baru       | 1990-05-15 |        1 |         1 | Jalan Baru No. 10  |     119.315 |   51 |
+|  6 | 86865 | Pegawai 6  | LAKI-LAKI     | Tempat Lahir 6  | 2023-12-08 |        1 |         2 | Alamat Pegawai 6   |     114.121 |   59 |
+|  5 | 16009 | Pegawai 5  | LAKI-LAKI     | Kota Baru       | 1995-09-05 |        1 |         6 | Jalan Indah No. 12 |         114 |   29 |
++----+-------+------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+5 rows in set (0.00 sec)
+
+Jawaban No33. Tampilkan data 5 pegawai terbawah gunakan klausa limit offset
+
+MariaDB [dbpegawai]> SELECT *
+    -> FROM (
+    ->     SELECT *
+    ->     FROM pegawai
+    ->     ORDER BY berat_badan DESC
+    ->     LIMIT 5
+    -> ) AS subquery
+    -> ORDER BY berat_badan ASC;
++----+-------+------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+| id | nip   | nama       | jenis_kelamin | tmp_lahir       | tgl_lahir  | iddivisi | idjabatan | alamat             | berat_badan | umur |
++----+-------+------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+|  5 | 16009 | Pegawai 5  | LAKI-LAKI     | Kota Baru       | 1995-09-05 |        1 |         6 | Jalan Indah No. 12 |         114 |   29 |
+|  6 | 86865 | Pegawai 6  | LAKI-LAKI     | Tempat Lahir 6  | 2023-12-08 |        1 |         2 | Alamat Pegawai 6   |     114.121 |   59 |
+|  1 | 95150 | Pegawai 1  | PEREMPUAN     | Kota Baru       | 1990-05-15 |        1 |         1 | Jalan Baru No. 10  |     119.315 |   51 |
+| 12 | 15594 | Pegawai 12 | LAKI-LAKI     | Tempat Lahir 12 | 2024-03-01 |        1 |         2 | Alamat Pegawai 12  |     137.502 |   25 |
+|  4 | 97378 | Pegawai 4  | LAKI-LAKI     | Kota Tua        | 1985-03-20 |        1 |         1 | Jalan Jaya No. 8   |     138.626 |   23 |
++----+-------+------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+5 rows in set (0.03 sec)
+
+Jawaban N034. Tampilkan jumlah pegawai gunakan fungsi aggregrat count
+
+MariaDB [dbpegawai]>  SELECT COUNT(*) AS jumlah_pegawai
+    -> FROM pegawai;
++----------------+
+| jumlah_pegawai |
++----------------+
+|             19 |
++----------------+
+1 row in set (0.01 sec)
+
+Jawaban No35.Tampilkan nip,nama pegawai, umur yg paling tua gunakan fungsi aggregrat max (kombinasi 
+dengan sub query)  
+
+MariaDB [dbpegawai]> SELECT nip, nama, umur
+    -> FROM pegawai
+    -> WHERE umur = (
+    ->     SELECT MAX(umur)
+    ->     FROM pegawai
+    -> );
++-------+-----------+------+
+| nip   | nama      | umur |
++-------+-----------+------+
+| 86865 | Pegawai 6 |   59 |
++-------+-----------+------+
+1 row in set (0.01 sec)
+
+Jawaban No36. Tampilkan nip,nama pegawai, berat_badan yg paling kurus gunakan fungsi aggregrat min 
+(kombinasi dengan sub query) 
+
+MariaDB [dbpegawai]> SELECT nip, nama, berat_badan
+    -> FROM pegawai
+    -> WHERE berat_badan = (
+    ->     SELECT MIN(berat_badan)
+    ->     FROM pegawai
+    -> );
++-------+------------+-------------+
+| nip   | nama       | berat_badan |
++-------+------------+-------------+
+| 43335 | Pegawai 17 |     45.1738 |
++-------+------------+-------------+
+1 row in set (0.00 sec)
+
+Jawaban No37. Tampilkan data rata2 umur pegawai gunakan fungsi aggregrat avg
+
+MariaDB [dbpegawai]> SELECT AVG(umur) AS rata_rata_umur
+    -> FROM pegawai;
++----------------+
+| rata_rata_umur |
++----------------+
+|        43.0526 |
++----------------+
+1 row in set (0.01 sec)
+
+Jawaban No38. 
+Tampilkan jumlah data pegawai yang laki2 dan berumur lebih dari 40 tahun dan berjabatan 
+Manajer, gunakan fungsi aggregrat count dan klausa AND
+
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai
+    -> FROM pegawai
+    -> WHERE jenis_kelamin = 'LAKI-LAKI'
+    -> AND umur > 40
+    -> AND idjabatan = 2; -- Anggap saja idjabatan untuk Manajer adalah 2
++----------------+
+| jumlah_pegawai |
++----------------+
+|              1 |
++----------------+
+1 row in set (0.01 sec)
+
+Jawaban No39. Tampilkan jumlah data pegawai yang perempuan dan berumur kurang dari 40 tahun dan 
+berjabatan Staff, gunakan fungsi aggregrat count dan klausa AND
+
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai
+    -> FROM pegawai
+    -> WHERE jenis_kelamin = 'PEREMPUAN'
+    -> AND umur < 40
+    -> AND idjabatan = 3; -- Anggap saja idjabatan untuk Staff adalah 3
++----------------+
+| jumlah_pegawai |
++----------------+
+|              1 |
++----------------+
+1 row in set (0.00 sec)
+
+Jawaban No40.  Tampilkan jumlah data pegawai yang perempuan gunakan fungsi aggregrat count
+
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai_perempuan
+    -> FROM pegawai
+    -> WHERE jenis_kelamin = 'PEREMPUAN';
++--------------------------+
+| jumlah_pegawai_perempuan |
++--------------------------+
+|                        9 |
++--------------------------+
+1 row in set (0.00 sec)
+
+Jawaban No.41 Tampilkan jumlah pegawai yang bekerja di divisi SDM dengan fungsi aggregrat sum dan klausa 
+WHERE 
+
+MariaDB [(none)]> USE dbpegawai;
+Database changed
+MariaDB [dbpegawai]> SELECT SUM(CASE WHEN iddivisi = (SELECT ID FROM divisi WHERE nama = 'SDM') THEN 1 ELSE 0 END) AS jumlah_pegawai_SDM
+    -> FROM pegawai;
++--------------------+
+| jumlah_pegawai_SDM |
++--------------------+
+|                 19 |
++--------------------+
+1 row in set (0.03 sec)
+
+Jawaban No.42  Tampilkan jumlah pegawai berdasarkan divisi masing2 menggunakan fungsi aggregrat count 
+dan klausa group by:
+
+
+MariaDB [dbpegawai]> SELECT divisi.nama AS nama_divisi, COUNT(*) AS jumlah_pegawai
+    -> FROM pegawai
+    -> JOIN divisi ON pegawai.iddivisi = divisi.ID
+    -> GROUP BY divisi.nama;
++-------------+----------------+
+| nama_divisi | jumlah_pegawai |
++-------------+----------------+
+| SDM         |             19 |
++-------------+----------------+
+1 row in set (0.00 sec)
+
+
+Jawaban No43 ampilkan data jumlah pegawai berdasarkan gender, yg jumlah minimal 10 orang (gunakan 
+group by dan having)
+
+MariaDB [dbpegawai]> SELECT jenis_kelamin, COUNT(*) AS jumlah_pegawai
+    -> FROM pegawai
+    -> GROUP BY jenis_kelamin
+    -> HAVING COUNT(*) >= 10;
++---------------+----------------+
+| jenis_kelamin | jumlah_pegawai |
++---------------+----------------+
+| LAKI-LAKI     |             10 |
++---------------+----------------+
+1 row in set (0.00 sec)
+
+
+Jawaban No44. Cari data pegawai yang berawalan kata Muhammad
+
+MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    -> WHERE nama LIKE 'Muhammad%';
++----+-------+------------------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+| id | nip   | nama                   | jenis_kelamin | tmp_lahir       | tgl_lahir  | iddivisi | idjabatan | alamat             | berat_badan | umur |
++----+-------+------------------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+|  1 | 95150 | Muhammad Nizar Al-Faiq | PEREMPUAN     | Kota Baru       | 1990-05-15 |        1 |         1 | Jalan Baru No. 10  |     119.315 |   51 |
+|  3 | 30473 | muhammad fauzi         | PEREMPUAN     | Kota Tua        | 1988-12-10 |        1 |         3 | Jalan Maju No. 15  |     113.044 |   35 |
+|  4 | 97378 | muhammad pian          | LAKI-LAKI     | Kota Tua        | 1985-03-20 |        1 |         1 | Jalan Jaya No. 8   |     138.626 |   23 |
+|  5 | 16009 | muhammad adit          | LAKI-LAKI     | Kota Baru       | 1995-09-05 |        1 |         6 | Jalan Indah No. 12 |         114 |   29 |
+|  6 | 86865 | muhammad arit          | LAKI-LAKI     | Tempat Lahir 6  | 2023-12-08 |        1 |         2 | Alamat Pegawai 6   |     114.121 |   59 |
+|  8 | 17350 | muhammad fairus        | LAKI-LAKI     | Tempat Lahir 8  | 2024-02-22 |        1 |         8 | Alamat Pegawai 8   |     60.6596 |   54 |
+|  9 | 63710 | muhammad hafis         | LAKI-LAKI     | Tempat Lahir 9  | 2023-12-04 |        1 |         6 | Alamat Pegawai 9   |     97.4846 |   52 |
+| 10 | 39454 | muhammad fadil         | PEREMPUAN     | Tempat Lahir 10 | 2024-03-06 |        1 |         6 | Alamat Pegawai 10  |     65.4441 |   38 |
+| 11 | 69429 | muhammad fahri         | LAKI-LAKI     | Tempat Lahir 11 | 2023-07-11 |        1 |         3 | Alamat Pegawai 11  |      94.767 |   56 |
+| 12 | 15594 | muhammad fadeli        | LAKI-LAKI     | Tempat Lahir 12 | 2024-03-01 |        1 |         2 | Alamat Pegawai 12  |     137.502 |   25 |
+| 15 | 25885 | muhammad ghfari        | LAKI-LAKI     | Tempat Lahir 15 | 2023-12-24 |        1 |         8 | Alamat Pegawai 15  |     88.1092 |   50 |
+| 17 | 43335 | muhammad reza          | PEREMPUAN     | Tempat Lahir 17 | 2023-11-17 |        1 |         2 | Alamat Pegawai 17  |     45.1738 |   21 |
+| 18 | 48377 | muhammad jorday        | PEREMPUAN     | Tempat Lahir 18 | 2023-12-30 |        1 |         5 | Alamat Pegawai 18  |     56.1682 |   44 |
++----+-------+------------------------+---------------+-----------------+------------+----------+-----------+--------------------+-------------+------+
+13 rows in set (0.00 sec)
+
+
+Jawaban No.45 5 Cari data pegawai yang berakhiran kata Santoso
+
+MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    -> WHERE nama LIKE '%Santoso';
++----+-------+---------+---------------+-----------------+------------+----------+-----------+-------------------+-------------+------+
+| id | nip   | nama    | jenis_kelamin | tmp_lahir       | tgl_lahir  | iddivisi | idjabatan | alamat            | berat_badan | umur |
++----+-------+---------+---------------+-----------------+------------+----------+-----------+-------------------+-------------+------+
+| 13 | 30492 | Santoso | PEREMPUAN     | Tempat Lahir 13 | 2023-06-11 |        1 |         5 | Alamat Pegawai 13 |     63.2111 |   57 |
++----+-------+---------+---------------+-----------------+------------+----------+-----------+-------------------+-------------+------+
+1 row in set (0.00 sec)
+
+
+Jawaban No46. Cari data pegawai yang mengadung kata Asep
+
+
+MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    -> WHERE nama LIKE '%Asep%';
++----+-------+------+---------------+-----------------+------------+----------+-----------+-------------------+-------------+------+
+| id | nip   | nama | jenis_kelamin | tmp_lahir       | tgl_lahir  | iddivisi | idjabatan | alamat            | berat_badan | umur |
++----+-------+------+---------------+-----------------+------------+----------+-----------+-------------------+-------------+------+
+| 19 | 21019 | Asep | LAKI-LAKI     | Tempat Lahir 19 | 2024-01-24 |        1 |         7 | Alamat Pegawai 19 |      105.32 |   55 |
++----+-------+------+---------------+-----------------+------------+----------+-----------+-------------------+-------------+------+
+
+
+Jawaban No47. Cari data pegawai yang huruf kelimanya huruf S
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE nama LIKE '-----s%';
++----+-------+----------+---------------+-----------------+------------+----------+-----------+-------------------+-------------+------+
+| id | nip   | nama     | jenis_kelamin | tmp_lahir       | tgl_lahir  | iddivisi | idjabatan | alamat            | berat_badan | umur |
++----+-------+----------+---------------+-----------------+------------+----------+-----------+-------------------+-------------+------+
+|  8 | 17350 | StuarS   | LAKI-LAKI     | Tempat Lahir 8  | 2024-02-22 |        1 |         8 | Alamat Pegawai 8  |     60.6596 |   54 |
+| 10 | 39454 | sudirs   | PEREMPUAN     | Tempat Lahir 10 | 2024-03-06 |        1 |         6 | Alamat Pegawai 10 |     65.4441 |   38 |
+| 12 | 15594 | Santooso | LAKI-LAKI     | Tempat Lahir 12 | 2024-03-01 |        1 |         2 | Alamat Pegawai 12 |     137.502 |   25 |
+| 13 | 30492 | Santoso  | PEREMPUAN     | Tempat Lahir 13 | 2023-06-11 |        1 |         5 | Alamat Pegawai 13 |     63.2111 |   57 |
++----+-------+----------+---------------+-----------------+------------+----------+-----------+-------------------+-------------+------+
+4 rows in set (0.00 sec)
+
+
+
+
